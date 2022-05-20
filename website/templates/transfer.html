@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+{% block title %}Sign Up{% endblock %}
+
+
+{% block content %}
+TODO : get choices and show playlists
+<br\>
+<br\>
+<div align-center>
+    <form method="POST">
+        <!-- trackswitch-->
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="tracks_switch" name="tracks_switch">
+            <label class="custom-control-label" for="tracks_switch">Tracks</label>
+        </div>
+        <!-- albumswitch-->
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="albums_switch" name="albums_switch">
+            <label class="custom-control-label" for="albums_switch">Albums</label>
+        </div>
+        <!-- playlistswitch-->
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="playlists_switch" name="playlists_switch">
+            <label class="custom-control-label" for="playlists_switch">Playlists</label>
+        </div>
+        <br/>
+        <!-- Submit -->
+        <button type="submit" class ="btn btn-primary btn-block">SUBMIT</button>
+        <br/>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').multiselect();
+    });
+</script>
+
+{% endblock%}
+
