@@ -25,8 +25,8 @@ class Track(db.Model):
     trackName = db.Column(db.String(100))
     artistName = db.Column(db.String(100))
     albumName = db.Column(db.String(100))
-    spotifyID = db.Column(db.Integer)
-    deezerID = db.Column(db.Integer)
+    spotifyID = db.Column(db.String(100))
+    deezerID = db.Column(db.String(100))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     playlist_id = db.Column(db.Integer,db.ForeignKey('playlist.id'))
 
