@@ -9,7 +9,7 @@ In the meantine feel free to explore the algorithm in the [website/Script](https
 [Deezer API](https://developers.deezer.com/)  
 [Spotify API](https://developer.spotify.com/documentation/web-api/)  
 [Spotipy](https://spotipy.readthedocs.io/en/2.19.0/)  
-[Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+[Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)  
 [SQLite](https://docs.python.org/3/library/sqlite3.html)
 
 ## License
