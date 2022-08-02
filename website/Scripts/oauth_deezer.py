@@ -91,8 +91,8 @@ class MyServer(BaseHTTPRequestHandler):
         )
 
         # Write token to .env file
-#       with open(".env", "w+") as file:
-        with open(".env", "a") as file:
+        with open(".env", "w+") as file:
+        #with open(".env", "a") as file:
 
             file.writelines(["\nexport DEEZER_TOKEN='" + token_data["access_token"]+"'"])
             print("Token written to .env file")

@@ -2,9 +2,50 @@
 {% block title %}Loading{% endblock %}
 
 {% block content %}
+<!--
+TODO :  Add vizualitation / link to download user data
+-->
+<br>
 
-TODO :
-<br> - need to show current user informations,
-<br> - Add vizualitation 
-<br> - link to download the data
+<br>
+<div class="current_user">
+    <h5>Current User : <a style="text-decoration: none; color: #421b1b"> {{current_user.email}}</a></h5>
+</div>
+<br>
+<div class="row" >
+    <div class="col-sm" style="text-align: center;" >
+
+        <div class="user_albums">
+            <h4>User album </h4>
+            <p style="text-decoration: none; color: #421b1b"> Total number : {{user_albums|length}}</p>
+            <a href="#Foo" class="btn btn-secondary" data-toggle="collapse" > Show Albums</a>
+            <div id="Foo" class="main-container collapse">
+                {% for album in user_albums %}
+                <a 
+                style="text-decoration: none; color: #dd5b5b">
+                        {{ album.albumName }}
+                    </a>
+                    |
+                {% endfor %}   
+            </div>
+        </div>
+    </div>
+    <div class="col-sm " >
+        <div class="user_tracks" style="text-align: center;">
+            <h4>User Tracks </h4>
+            <p style="text-decoration: none; color: #421b1b"> Total number : {{user_tracks|length}}</p>
+            <a href="#Boo" class="btn btn-secondary" data-toggle="collapse" > Show tracks</a>
+            <div id="Boo" class="main-container collapse">
+            {% for track in user_tracks %}
+                <a 
+                style="text-decoration: none; color: #dd5b5b">
+                        {{ track.trackName }}
+                    </a>
+                    |
+                {% endfor %}   
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock%}

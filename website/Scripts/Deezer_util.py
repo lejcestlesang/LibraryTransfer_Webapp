@@ -2,8 +2,6 @@ import requests
 
 import pandas as pd
 
-import oauth_deezer
-
 import os
 
 def wanna_saved(
@@ -400,7 +398,8 @@ def Authentication(
     if request_json('GET','https://api.deezer.com/user/me',param_session) == False:
         app_id = param_session['app_id']
         app_secret = param_session['app_secret']
-        os.system(f"python oauth_deezer.py --app-id {app_id} --app-secret {app_secret}")
+        print('yolo')
+        os.system(f"python website/Scripts/oauth_deezer.py --app-id {app_id} --app-secret {app_secret}")
 
     # add option to delete the deezer token everytime a new one is generated
         

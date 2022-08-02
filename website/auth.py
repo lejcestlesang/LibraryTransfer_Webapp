@@ -49,7 +49,8 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category = 'success_account_creation')
-            return redirect(url_for('views.home'))
+            # need to add a redirect to dashboard and directly log in
+            return redirect(url_for('auth.signin'))
 
     return render_template('sign_up.html',user=current_user)
 
