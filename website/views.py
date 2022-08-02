@@ -4,11 +4,12 @@ from flask_login import login_required,current_user
 
 from website import util
 from .Scripts.Spotify_util import get_tracks_df,get_albums_df
-from .Scripts.Deezer_util import Authentication
+from .Scripts.Deezer_util import Authentication,add_albums,query_to_dict
 
 ## LOAD ENVIRONMENT VARIABLES : 
 import dotenv,os
 
+import pandas as pd
 
 #setup the blueprint
 views = Blueprint('views',__name__)
@@ -95,21 +96,26 @@ def upload():
             dotenv.load_dotenv(dotenv.find_dotenv('.env'))
             param_session = {'app_secret':os.environ['DEEZER_CLIENT_SECRET'],
                             'app_id': os.environ['DEEZER_APP_ID'],
-                            'access_token':os.environ['DEEZER_TOKEN']
                             }
-            print(param_session)
+
             #Deezer side
             # get connection to Deezer API with current user Deezer login
             if tracks_deezer=='on' or albums_deezer=='on' or playlists_deezer=='on':
-                Authentication(param_session=param_session)
-                pass
+                param_session['acces_token'] = Authentication(param_session=param_session)
+                print('yolo final : ')
+                print(param_session)
 
             if tracks_deezer =='on':
                 import time
                 time.sleep(5)
                 flash('Not available yet, come back soon..',category='error')
             if albums_deezer =='on':
-                flash('Notavailable yet, come back soon..',category='error')
+                # get user albums
+                user_album = util.get_user_albums(current_user)
+                # convert user_album to a dataframe before adding it
+                #print(df_alb)
+                #add_albums(param_session,df_album,True)
+                flash('Upload of user album Successfull',category='success')
             if playlists_deezer =='on':
                 flash('Not available yet, come back soon..',category='error')
 

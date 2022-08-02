@@ -1,4 +1,5 @@
 """Simple script to obtain an API token via OAuth."""
+from os import access
 import webbrowser
 from argparse import ArgumentParser
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -21,6 +22,7 @@ class OAuthDancer:
     app_id: str
     app_secret: str
     redirect_url: str = f"http://{HOST_NAME}:{SERVER_PORT}{REDIRECT_PATH}"
+    access_token:str = ''# new param
 
     def __init__(self, app_id: str, app_secret: str) -> None:
         self.app_id = app_id
@@ -61,6 +63,14 @@ class OAuthDancer:
         # -> parse this to a dictionary
         return dict(tuple(p.split("=", 1)) for p in content.split("&"))
 
+    def set_token(self,token:str):
+        """add the token to the Dance parameters / new methods
+
+        Args:
+            token (str): access token to be used
+        """
+        self.access_token=token
+
 
 class MyServer(BaseHTTPRequestHandler):
     """Simple HTTP request handler to perform the OAuth dance."""
@@ -89,14 +99,11 @@ class MyServer(BaseHTTPRequestHandler):
             f"<br>"
             f"Expires = {token_data['expires']}"
         )
+        #instead of writing the acces_token return it as an argument to use it in the app
 
-        # Write token to .env file
-        with open(".env", "w+") as file:
-        #with open(".env", "a") as file:
+        self.oauth_dancer.set_token(token_data['access_token'])
+        raise SystemExit("All Done")        
 
-            file.writelines(["\nexport DEEZER_TOKEN='" + token_data["access_token"]+"'"])
-            print("Token written to .env file")
-        raise SystemExit("All Done")
 
     def _render_content(self, content: str):
         """Render the provided content in a HTML page."""
@@ -120,6 +127,25 @@ class MyServer(BaseHTTPRequestHandler):
         """Shortcut to access the `OAuthDancer` instance."""
         return self.server.oauth_dancer
 
+def get_access_token(app_id,app_secret):
+
+    # Start local webserver
+    webserver = HTTPServer((HOST_NAME, SERVER_PORT), MyServer)
+
+    # Commence OAuth Dance
+    webserver.oauth_dancer = OAuthDancer(app_id=app_id, app_secret=app_secret)
+    start_url = webserver.oauth_dancer.get_auth_page()
+    print(f"Opening {start_url} in web browser...")
+    webbrowser.open(start_url)
+
+    # Wait for user action and display token when finished
+    try:
+        webserver.serve_forever()
+    except (KeyboardInterrupt, SystemExit):
+        pass
+    finally:
+        webserver.server_close()
+        return webserver.oauth_dancer.access_token
 
 if __name__ == "__main__":
     # Parse command line options

@@ -4,6 +4,8 @@ import pandas as pd
 
 import os
 
+from website.Scripts.oauth_deezer import OAuthDancer, get_access_token
+
 def wanna_saved(
     tipo: str,
     df: pd.DataFrame
@@ -399,7 +401,10 @@ def Authentication(
         app_id = param_session['app_id']
         app_secret = param_session['app_secret']
         print('yolo')
-        os.system(f"python website/Scripts/oauth_deezer.py --app-id {app_id} --app-secret {app_secret}")
+        #os.system(f"python website/Scripts/oauth_deezer.py --app-id {app_id} --app-secret {app_secret}")
+        access_token = get_access_token(app_id,app_secret)
+        print(f'yolo :{access_token} ')
+        return access_token
 
     # add option to delete the deezer token everytime a new one is generated
         

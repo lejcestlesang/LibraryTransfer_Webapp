@@ -84,10 +84,11 @@ def get_user_tracks(current_user):
     """
     return current_user.tracks
 
-
-
-def get_tracks(current_user):
-    pass
-
 def get_users():
     return db.session.query(User).all()
+
+def list_of_obj_to_dataframe(mylist): # to finish
+    result= dict()
+    for index,item in enumerate(mylist):
+        result[index].append(x.value)
+    return result

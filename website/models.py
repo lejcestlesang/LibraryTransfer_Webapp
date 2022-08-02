@@ -55,5 +55,8 @@ class Album(db.Model):
     deezerID = db.Column(db.Integer)
     users = relationship("User", secondary=user_album, back_populates="albums")
 
+#class Token(db.Model):
+
+
 # add a new table to track the login of the users
 # add a Playlists
