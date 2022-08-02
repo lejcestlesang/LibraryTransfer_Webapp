@@ -19,7 +19,7 @@ def signin():
             if check_password_hash(user.password, pwd):
                 flash('Logging successfully!', category='success')
                 login_user(user,remember=True)
-                return redirect(url_for('views.transfer'))
+                return redirect(url_for('views.dashboard'))
             else:
                 flash('Incorrect password, try again.',category='error')
         else:
@@ -58,6 +58,3 @@ def signup():
 def logout():
     logout_user()
     return render_template('logout.html', user=current_user)
-
-
-

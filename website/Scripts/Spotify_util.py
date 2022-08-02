@@ -60,10 +60,11 @@ def get_albums_df(
     totalAlbums = results['total']
     artists = []
     albums = []
-
+    albumIDs = []
     while len(albums)<totalAlbums:
         for item in results['items']:
             albumname = item['album']['name']
+            albumID = item['album']['id']
             if len(item['album']['artists']) == 1 : 
                 artistname = item['album']['artists'][0]['name']
             else :
@@ -71,14 +72,16 @@ def get_albums_df(
                 for i,val in enumerate(item['album']['artists']):
                     artistname = artistname+ val['name'] + '/'
             if print_loading:
-                print(f'Album name : {albumname} by {artistname}')
+                print(f'Album name : {albumname} by {artistname} id {albumID}')
             artists.append(artistname)
             albums.append(albumname)
+            albumIDs.append(albumID)
         results = sp.next(results)
 
     return pd.DataFrame({
         'Artists': artists, 
         'Albums': albums,
+        'AlbumID':albumIDs
         })
 
 def get_playlists_info(

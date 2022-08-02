@@ -1,3 +1,6 @@
+#Data Folder
+website/Data
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -26,6 +29,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+#Databases
+*.db
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -127,3 +133,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+

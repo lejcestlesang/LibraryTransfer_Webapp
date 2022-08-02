@@ -1,0 +1,96 @@
+{% extends "base.html" %} 
+{% block title %}Sign Up{% endblock %}
+
+
+{% block content %}
+TODO :
+<br> show playlists then loading page for spotify
+<br> add download from deezer
+<br>
+<br>
+
+
+
+
+<div class ='container'>
+    <div id = 'loading' style="width: 64px;
+    height: 64px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: none;
+    background: url(/static/loading_download.gif) no-repeat;
+    cursor: wait;"></div>
+    <div id ='content'>
+        <h3 style="text-align: center;">  Download choices  </h3>
+        <div class="row" >
+            <div class="col-sm" >
+                <h4 style="text-align: center;"> <img src="static/spotify_logo_with_text.png" width="100">  </h4>
+                
+                <form method="POST">
+                    <!-- trackswitch-->
+                    <!-- trackswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="tracks_switch_spotify" name="tracks_switch_spotify">
+                        <label class="custom-control-label" for="tracks_switch_spotify">Tracks</label>
+                    </div>
+                    <!-- albumswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="albums_switch_spotify" name="albums_switch_spotify">
+                        <label class="custom-control-label" for="albums_switch_spotify">Albums</label>
+                    </div>
+                    <!-- playlistswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="playlists_switch_spotify" name="playlists_switch_spotify">
+                        <label class="custom-control-label" for="playlists_switch_spotify">Playlists</label>
+                    </div>
+                    <br/>
+                    <!-- Submit -->
+                    <button type="submit" class ="btn btn-primary btn-block" onclick="loading();">SUBMIT
+                        </button>
+                    <br/>
+                </form>
+            </div>
+            <div class="col-sm" style="align-items: center; align-content: center;">
+                <h4 style="text-align: center;">  <img src="static/512px-Deezer_logo.svg.png" width="100">  </h4> 
+                <form method="POST">
+                    <!-- trackswitch-->
+                    <!-- trackswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="tracks_switch_deezer" name="tracks_switch_deezer">
+                        <label class="custom-control-label" for="tracks_switch_deezer">Tracks</label>
+                    </div>
+                    <!-- albumswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="albums_switch_deezer" name="albums_switch_deezer">
+                        <label class="custom-control-label" for="albums_switch_deezer">Albums</label>
+                    </div>
+                    <!-- playlistswitch-->
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="playlists_switch_deezer" name="playlists_switch_deezer">
+                        <label class="custom-control-label" for="playlists_switch_deezer">Playlists</label>
+                    </div>
+                    <br/>
+                    <!-- Submit -->
+                    <button type="submit" class ="btn btn-primary btn-block" onclick="loading();" >SUBMIT                                             
+                    </button>
+                    <br/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').multiselect();
+    });
+</script>
+<script type="text/javascript">
+    function loading(){
+        $("#loading").show();
+        $("#content").hide();       
+    }
+</script>
+
+{% endblock%}
+

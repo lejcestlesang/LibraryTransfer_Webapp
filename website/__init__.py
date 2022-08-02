@@ -3,9 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 
-
 db = SQLAlchemy()
-DB_NAME = 'database_v2.db'
+#DB_NAME = 'database_v2.db' #v2
+DB_NAME = 'database_v3.db'
+
 
 def create_app():
     #init app
@@ -15,7 +16,7 @@ def create_app():
 
 
     # create and initialize db
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///Data/{DB_NAME}'
     db.init_app(app)
 
     login_manager = LoginManager()
@@ -28,8 +29,9 @@ def create_app():
     
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth,url_prefix='/')
-    
-    from .models import User,Track,Album,Playlist
+
+    from .models import User,Track,Album
+
 
     create_database(app)
 
@@ -40,6 +42,7 @@ def create_app():
     return app
 
 def create_database(app):
+    print('CREATE DATABASE YOOOOOOOOOOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database !')
