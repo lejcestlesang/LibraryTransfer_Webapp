@@ -1,8 +1,8 @@
 # LibraryTransfer_Webapp
 
-This is an ongoing project. The readme will be completed once the website will is fully functioning.
+This is an ongoing project. The readme will be completed once the website is fully functioning.  
 
-In the meantine feel free to explore the algorithm in the [website/Script](https://github.com/lejcestlesang/Spotify_to_Deezer) folder.
+In the meantine feel free to explore the github repository for details about [website/Script](https://github.com/lejcestlesang/Spotify_to_Deezer) folder.
 
 ## Resources
 
