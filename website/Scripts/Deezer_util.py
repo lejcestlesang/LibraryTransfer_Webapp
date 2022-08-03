@@ -1,10 +1,7 @@
 import requests
-
 import pandas as pd
 
-import os
-
-from website.Scripts.oauth_deezer import OAuthDancer, get_access_token
+from website.Scripts.oauth_deezer import get_access_token
 
 def wanna_saved(
     tipo: str,
@@ -154,7 +151,6 @@ def deezer_search(
         print(URL)
 
     json_response = request_json('GET',URL,param_session,print_json)
-
     if json_response['total'] > 0 :
         if track is None:
             return json_response['data'][0]['album']['id']
@@ -346,8 +342,7 @@ def add_playlists(
             print(f'In {playlistname} (in spotify {numbertracks} songs): {new_trackcount} new tracks added, {alreadyIN_trackcount} already saved \n')
     return df_library_spotify
 
-
-def add_albums(
+def upload_albums(
     param_session: dict,
     spotify_albums: pd.DataFrame,
     print_loading: bool = False,
@@ -361,32 +356,42 @@ def add_albums(
         print_loading (bool, optional): print album and ID in deezer library Defaults to False.
         print_json (bool, optional): print request responses. Defaults to False.
     """
-    count_newalbums = 0
+    count_newalbums = 0 # 'albumName','artistName'
     count_unfound = 0
+    album_deezer_ids = []
+
+    tot_album=len(spotify_albums)
+
     # for every albums find the deezerid
     for index,row in spotify_albums.iterrows():
-        album = row.Albums
-        # In case we have several artist in on album, we select just the first one, might be optimized later on
-        if '/' in row.Albums:
-            index = album.find('/')
-            album = album[:index]
 
-        album_id = deezer_search(param_session,artist=row.Artists,album=row.Albums,print_json=False,print_loading=False)
-        param_session['album_id'] = album_id
-
-        if album_id == -1:
+        print(f'Album : {index} of {tot_album}')
+        # if deezerID not in the dataframe searhc for it 
+        if row['deezerID'] is None:    
+            # search the album ID in deezer API 
+            album_id = deezer_search(param_session,artist=row.artistName,album=row.albumName,print_json=False,print_loading=print_loading)
+            param_session['album_id'] = album_id
+        else:
+            param_session['album_id'] = row.deezerID
+        print(param_session)
+        # if not found
+        if param_session['album_id'] == -1:
             count_unfound += 1
             if print_loading:
-                print(f'Not Found : {row.Artists} - {row.Albums}')
+                print(f'Not Found : {row.artistName} - {row.albumName}')
         else:
-            #upload the album
+            #if albumID found upload the album
             response = request_json('POST','https://api.deezer.com/user/me/albums',param_session,print_json)
             if response == True:
+                # complete list of album_id in the db and its id in the deezer API
+                album_deezer_ids.append([row.album_id,param_session['album_id']])
+                #row._sa_instance_state
                 if print_loading:
-                    print(f'Found : {row.Artists} - {row.Albums} : id {album_id}')
+                    print(f'Found : {row.artistName} - {row.albumName} ')
                 count_newalbums += 1
     
     print(f'{count_unfound} Albums not found - {count_newalbums} albums added (or already in the library).')
+    return album_deezer_ids
 
 def Authentication(
     param_session: dict
@@ -400,11 +405,8 @@ def Authentication(
     if request_json('GET','https://api.deezer.com/user/me',param_session) == False:
         app_id = param_session['app_id']
         app_secret = param_session['app_secret']
-        print('yolo')
         #os.system(f"python website/Scripts/oauth_deezer.py --app-id {app_id} --app-secret {app_secret}")
         access_token = get_access_token(app_id,app_secret)
-        print(f'yolo :{access_token} ')
+        print(f'Oauth dance access token :{access_token} ')
         return access_token
-
-    # add option to delete the deezer token everytime a new one is generated
         

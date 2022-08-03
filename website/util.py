@@ -1,8 +1,8 @@
-from select import select
 import pandas as pd 
 from . import db
-from .models import Track,Album,User,user_album
-from sqlalchemy import func,text
+from .models import Track,Album,User
+from sqlalchemy import func,text,select
+
 
 def get_or_create(session, model, defaults=None, **kwargs):
     instance = session.query(model).filter_by(**kwargs).one_or_none()
@@ -87,8 +87,30 @@ def get_user_tracks(current_user):
 def get_users():
     return db.session.query(User).all()
 
-def list_of_obj_to_dataframe(mylist): # to finish
-    result= dict()
-    for index,item in enumerate(mylist):
-        result[index].append(x.value)
-    return result
+def list_of_obj_to_dataframe(mylist):
+    res = []
+    for item in mylist:
+        res.append(item.__dict__)
+    return pd.DataFrame(res)
+
+def add_album_deezer_id(list_Deezer_ids:list):
+
+    for item in list_Deezer_ids:
+        # get the element with the album_id
+
+        # query from a class // query in sqlalchemy 2.x style
+        statement = select(Album).filter_by(album_id=item[0])
+        # list of first element of each row (i.e. User objects)
+        album = db.session.execute(statement).scalars().one()
+
+        # if ddeezerId not present add it to the db
+        if album.deezerID is None:
+            # add the Deezer id to it
+            album.deezerID= item[1]
+            print(album.deezerID)
+            db.session.commit()
+        else:
+            print('ID already present')  
+
+def add_track_deezer_id(list_deezer_ids:list):
+    pass  
