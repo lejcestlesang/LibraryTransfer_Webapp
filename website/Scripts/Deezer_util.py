@@ -373,7 +373,6 @@ def upload_albums(
             param_session['album_id'] = album_id
         else:
             param_session['album_id'] = row.deezerID
-        print(param_session)
         # if not found
         if param_session['album_id'] == -1:
             count_unfound += 1
@@ -409,4 +408,4 @@ def Authentication(
         access_token = get_access_token(app_id,app_secret)
         print(f'Oauth dance access token :{access_token} ')
         return access_token
-        
+      

@@ -5,13 +5,30 @@ from sqlalchemy import func,text,select
 
 
 def get_or_create(session, model, defaults=None, **kwargs):
+    """get or create if not already created in the database with the argument passed
+
+    Args:
+        session : databse current session, object that connect to the db
+        model : name of the database Table
+        defaults (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: model instance 
+        (bool): True if new item, False o/w
+    """
+    #query the model in the db with the passed kwargs
     instance = session.query(model).filter_by(**kwargs).one_or_none()
+
+    # check if already in the db
     if instance:
         return instance, False
     else:
         #kwargs |= defaults or {}
+
+        # create the new model
         instance = model(**kwargs)
         try:
+            # add it to the db
             session.add(instance)
             session.commit()
         except Exception:  # The actual exception depends on the specific database so we catch all exceptions. This is similar to the official documentation: https://docs.sqlalchemy.org/en/latest/orm/session_transaction.html
@@ -19,13 +36,26 @@ def get_or_create(session, model, defaults=None, **kwargs):
             instance = session.query(model).filter_by(**kwargs).one()
             return instance, False
         else:
+            # return the new instance
             return instance, True
 
-def track_to_db(df,current_user,streaming_service_name='Spotify'):
+def track_to_db(df : pd.DataFrame,current_user:User,streaming_service_name='Spotify')->bool:
+    """convert downloaded tracks to the db
+
+    Args:
+        df (pd.DataFrame): df of the tracks downloaded
+        current_user (User): current user that downloaded the data
+        streaming_service_name (str, optional): _description_. Defaults to 'Spotify'.
+
+    Returns:
+        bool: True if tracks convert to db successful
+    """
+    # check if df is not empty
     if len(df)==0:
         print('Error, dowloaded 0 tracks. Check track_to_db')
         return False
     if len(df) > 0:
+        # iterate on all tracks
         for index,track in df.iterrows():
             print(index)
             print(track['Tracks'])
@@ -33,12 +63,12 @@ def track_to_db(df,current_user,streaming_service_name='Spotify'):
             print(track['Albums'])
             print(track['trackid'])
             print(current_user.id)
-            #new_track = Track(trackName=track['Tracks'],artistName=track['Artists'],albumName=track['Albums'],spotifyID=track['trackid'])
+            # if data downloaded from spotify than add the new track with spotify ID
             if streaming_service_name == 'Spotify':
                 track_instance, newone = get_or_create(db.session,Track,\
                                        trackName=track['Tracks'],artistName=track['Artists'],albumName=track['Albums'],spotifyID=track['trackid'])
+            # connect the user to the tracks in the db
             track_instance.users.append(current_user)
-            #db.session.add(new_track)
             db.session.commit()
     return True
 
@@ -53,12 +83,10 @@ def album_to_db(df,current_user,streaming_service_name='Spotify'):
             print(row['Artists'])
             artist = row['Artists'].split('/')[0]
             print(row['Albums'])
-            #new_album = Album(artistName=artist,albumName=row['Albums'],spotifyID=row['AlbumID'])
             if streaming_service_name == 'Spotify':
                 album, newone = get_or_create(db.session,Album,\
                                         artistName=artist,albumName=row['Albums'],spotifyID=row['AlbumID'])
             album.users.append(current_user)
-            #db.session.add(new_album)
             db.session.commit()
     return True
 
@@ -84,7 +112,7 @@ def get_user_tracks(current_user):
     """
     return current_user.tracks
 
-def get_users():
+def get_all_users():
     return db.session.query(User).all()
 
 def list_of_obj_to_dataframe(mylist):
